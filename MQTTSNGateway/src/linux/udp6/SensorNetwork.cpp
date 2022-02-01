@@ -59,6 +59,11 @@ uint16_t SensorNetAddress::getPortNo(void)
     return _IpAddr.sin6_port;
 }
 
+uint32_t SensorNetAddress::getScopeId(void)
+{
+    return _IpAddr.sin6_scope_id;
+}
+
 void SensorNetAddress::setAddress(struct sockaddr_in6 *IpAddr)
 {
     memcpy((void*) &_IpAddr, IpAddr, sizeof(_IpAddr));
@@ -397,6 +402,7 @@ int UDPPort6::unicast(const uint8_t* buf, uint32_t length, SensorNetAddress* add
     memset(&dest, 0, sizeof(dest));
     dest.sin6_family = AF_INET6;
     dest.sin6_port = addr->getPortNo();
+    dest.sin6_scope_id = addr->getScopeId();
     memcpy(dest.sin6_addr.s6_addr, (const void*) &addr->getIpAddress()->sin6_addr, sizeof(in6_addr));
 
 #ifdef  DEBUG_NW
